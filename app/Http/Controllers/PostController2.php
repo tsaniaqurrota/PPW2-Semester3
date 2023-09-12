@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TestController2 extends Controller
+class PostController2 extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -62,7 +62,3 @@ class TestController2 extends Controller
         //
     }
 }
-
-
-
-
