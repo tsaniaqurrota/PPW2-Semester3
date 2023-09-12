@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BukuController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,3 +24,5 @@ Route::get('/about', function () {
         "email" => "tsania@gmail.com"
     ]);
 });
+
+Route::get('/buku', [BukuController::class, 'index']);
