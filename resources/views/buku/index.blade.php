@@ -4,15 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+
+    @if(Session::has('pesan'))
+        <div class="alert alert-success">{{Session::get('pesan')}}</div>
+    @endif
+    
     <title>Daftar Buku</title>
 
+    <!-- Tambahkan Bootstrap CSS dari CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css">
 </head>
 <body>
+    <div class="container mt-2">
+        <div class="flex justify-between items-center">
+            <a href="{{ route('buku.create') }}" class="btn btn-primary">Tambah Buku</a>
+            <form action="{{ route('buku.search') }}" method="get" class="flex items-center">
+                <input type="text" name="kata" class="form-control" placeholder="Cari..." style="width: 100%; display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">       
+            </form>
+        </div>  
 
-<p align="right"><a href="{{ route('buku.create') }}">Tambah Buku</a></p>
-
-<table class="table table-striped">
+        <table class="table table-striped">
     <thead>
         <tr>
             <th>id</th>
@@ -30,27 +43,39 @@
                 <td>{{ $buku->judul }}</td>
                 <td>{{ $buku->penulis }}</td>
                 <td>{{ "Rp ".number_format($buku->harga, 2, ',', '.') }}</td>
-                <td>{{ $buku->tgl_terbit }}</td>
+                <td>{{ \Carbon\Carbon::parse($buku->tgl_terbit)->format('d/m/Y') }}</td>
                 <td>
-                </td>
-                <td>
-                    <form action="{{ route('buku.destroy', $buku->id) }}" method="post">
-                        @csrf
-                        <button onclick="return confirm('Apakah yakin ingin menghapus data?')">Hapus</button>
-                    </form>
-                </td>
-                <td>
+                    <form action="{{ route('buku.destroy', $buku->id) }}" method="post" style="display: inline-block; margin-right: 5px;">
                     @csrf
-                    <button><a href="{{ route('buku.edit', $buku->id) }}">Edit</a></button>
+                    @method('DELETE')
+                        <button onclick="return confirm('Apakah yakin ingin menghapus data?')" class="btn btn-sm btn-danger">Hapus</button>
+                    </form>
+                    <form action="{{ route('buku.edit', $buku->id) }}" method="GET" style="display: inline-block;">
+                    @csrf
+                        <button type="submit" class="btn btn-sm btn-primary">Edit</button>
+                    </form>
                 </td>
             </tr>
         @endforeach
     </tbody>
-    </table>
-    <p>Jumlah Data: {{ $total_buku }}</p>
-    <p>Jumlah Total Harga: Rp {{ number_format($total_harga, 2, ',', '.') }}</p>
+    <tfoot>
+            <tr>
+                <th> TOTAL </th>
+                <th>{{ $jumlah_data }}</th>
+                <th colspan="1"></th>
+                <th>{{ "Rp ".number_format($total_harga, 2, ',', '.') }}</th>
+            </tr>
+    </tfoot>        
+</table>
+
+<div>{{ $data_buku->links() }}</div>
+
+</div>
+         
+
+<!-- Tambahkan Bootstrap JavaScript (Opsional, tergantung pada kebutuhan Anda) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
 </body>
 </html>
-
-
-
